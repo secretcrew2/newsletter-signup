@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          clifford: '#da373d',
+          tomato: 'hsl(4, 100%, 67%)',
+          neutralGray400: 'hsl(234, 29%, 20%)',
+          neutralGray500: 'hsl(235, 18%, 26%)',
+          neutralGray600: 'hsl(231, 7%, 60%)',
+          pinkLinear: 'hsl(232, 240, 160)',
+          orangeLinear: 'hsl(8, 240, 151)'
+        },
+        fontFamily:{
+          sans : ['Roboto'],
+        },
+        backgroundImage:{
+          linearImage: ''
+        },
+      }
+    }
+  }
+</script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  
+  <title>Frontend Mentor | Newsletter sign-up form with success message</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution { font-size: 11px; text-align: center; }
+    .attribution a { color: hsl(228, 45%, 44%); }
+
+    .showWarning{
+      background-color: hsla(4, 100%, 67%, 30%);
+      color:hsl(4, 100%, 67%);
+      font-weight: 700;
+    }
+    .showWarning::placeholder{
+      color:hsl(4, 100%, 67%);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main id="app" class="md:min-h-screen md:flex md:flex-col md:justify-center md:bg-neutralGray400">
+    <div v-if="!success" class="container-md mx-auto md:flex md:flex-row-reverse md:items-center bg-white md:p-8 md:pl-0 md:rounded-2xl">
+      <div id="image" class="flex-1">
+        <img src="assets/images/illustration-sign-up-mobile.svg" alt="" class="w-full md:content-[url('assets/images/illustration-sign-up-desktop.svg')]">
+      </div>
+      <div id="content" class="p-6 space-y-4 flex-1 md:p-16">
+        <h1 class="text-4xl md:text-5xl text-neutralGray400 font-bold">Stay updated!</h1>
+        <p class="text-neutralGray500">
+          Join 60,000+ product managers receiving monthly updates on:
+        </p>
+        <ul class="list-inside space-y-4">
+          <li class="text-neutralGray500 before:content-[url('assets/images/icon-list.svg')] flex gap-4">
+            Product discovery and building what matters
+          </li>
+          <li class="text-neutralGray500 before:content-[url('assets/images/icon-list.svg')] flex gap-4">
+            Measuring to ensure updates are a success
+          </li>
+          <li class="text-neutralGray500 before:content-[url('assets/images/icon-list.svg')] flex gap-4">
+            And much more!
+          </li>
+        </ul>
+        <div class="space-y-2">
+          <div id="warning-label" class="flex justify-between">
+            <label for="email" class="block text-neutralGray400 font-bold text-xs">Email Address</label>
+            <p class="text-xs text-tomato font-bold" v-show="warning">Valid email required</p>
+          </div>
+          <input v-model="email" type="email" id="email" :class="{showWarning: warning}" @keydown="warning = false" class="block border-solid border-neutralGray600 border-2 py-3 w-full pl-4 text-sm rounded-lg" placeholder="email@company.com">
+        </div>
+        <button @click.enter="submit" class="w-full py-3 bg-neutralGray400 text-white rounded-lg " tabindex="0">
+          Subscribe to monthly newsletter
+        </button>
+      </div>
+    </div>
+    <div v-if="success" class="max-w-lg p-8 md:p-16 md:rounded-[2rem] space-y-8 flex flex-col min-h-screen md:min-h-fit md:bg-white mx-auto">
+      <div class="mt-32 md:mt-0">
+        <img src="assets/images/icon-success.svg" alt="">
+      </div>
+      <h1 class="text-4xl md:text-5xl text-neutralGray400 font-bold">Thanks for subscribing!</h1>
+      <p class="text-neutralGray500">A confirmation email has been sent to <span class="text-neutralGray400 font-bold">{{ email }}</span> . 
+        Please open it and click the button inside to confirm your subscription.
+      </p>
+      <div class="flex-1 flex md:flex-initial md:block">
+        <button @click="success = false; email= '';" class="w-full py-3 bg-neutralGray400 text-white font-bold rounded-lg self-end">
+          Dismiss message
+        </button>
+      </div>
+    </div>
+  </main>
+
+
+  
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Your Name Here</a>.
+  </div>
+  <script>
+    const { createApp } = Vue
+
+createApp({
+  data() {
+    return {
+      email: '',
+      warning: false,
+      success: false
+    }
+  },
+  methods: {
+    isValidEmail(email){
+      const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+      return emailRegex.test(email);
+    },
+    submit(){
+      if(!this.isValidEmail(this.email)){
+        this.warning = true;
+      } else {
+        this.success = true;
+      }
+    }
+   
+  }
+}).mount('#app')
+  </script>
+</body>
+</html>
